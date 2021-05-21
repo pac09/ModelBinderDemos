@@ -1,0 +1,76 @@
+﻿@using Microsoft.Extensions.Options;
+@using BinderDemo.Models.Settings;
+
+@inject IOptions<BindingConfig> BindingConfig
+
+@{
+    ViewData["Title"] = "Home Page";
+    bool flagBase64Enabled = BindingConfig.Value.EnableBase64Encoding;
+}
+
+<div class="text-left">
+    <h1 class="display-4">Welcome Persona</h1>
+    <p>Lorem Ipsum dolor sit ammet...</p>
+    @Html.Hidden("flagBase64Enabled", flagBase64Enabled.ToString().ToLower())
+
+    @using (Html.BeginForm("LogPersona", "Home", FormMethod.Post, new Dictionary<string, object> { { "id", "personaForm" }, { "class", "test-harness-form" }, { "target", "_blank" } }))
+    {
+        <div class="form-group">
+            <label for="FirstName">First Name: </label>
+            <input type="text" id="FirstName" class="form-control" placeholder="John" name="FirstName" value="" />
+        </div>
+        <div class="form-group">
+            <label for="LastName">Last Name: </label>
+            <input type="text" id="LastName" class="form-control" placeholder="Doe" name="LastName" value="" />
+        </div>
+        <div class="form-group">
+            <label for="Phone">Phone: </label>
+            <input type="text" id="Phone" class="form-control" name="Phone" value="" />
+        </div>
+        <div class="form-group">
+            <label for="EmailAddress">Email Address: </label>
+            <input type="text" id="EmailAddress" class="form-control" name="EmailAddress" value="" />
+        </div>
+        <br />
+        <!-------------Section for Extra(Optional) Parameters------------->
+        <div class="panel panel-default">
+            <div class="panel-heading">Extra Attributes</div>
+            <div class="panel-body js-persona-attribs-panel">
+                <div class="form-group text-right">
+                    <button type="button" id="addExtraAttribute" class="btn btn-primary btn-circle" data-toggle="tooltip" data-placement="top" title="Add an Attribute">
+                        <span>+</span>
+                    </button>
+                    <button type="button" id="removeExtraAttribute" class="btn btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Delete an Attribute">
+                        <span>-</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!----------------------------------------------------------------->
+        <br />
+        <button type="submit" id="submitPersona" class="btn btn-primary">Submit</button>
+    }
+</div>
+
+@section Scripts{
+
+    <script id="hidden-template-persona" type="text/x-jquery-tmpl">
+        <div class="form-group js-extra-attributes-persona-template">
+            <div class="row">
+                <div class="col-6">
+                    <input type="text" class="form-control" name="key" value="" placeholder="Attribute's Name" />
+                </div>
+                <div class="col-6">
+                    <input type="text" class="form-control" name="value" value="" placeholder="Attribute's Value" />
+                </div>
+            </div>
+        </div>
+    </script>
+
+    <environment include="Development">
+        <script type="text/javascript" src="~/js/personaHandler.js" asp-append-version="true"></script>
+    </environment>
+    <environment exclude="Development">
+        <script type="text/javascript" src="~/js/personaHandler.min.js" asp-append-version="true"></script>
+    </environment>
+}
